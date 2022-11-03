@@ -1,22 +1,26 @@
 import { Show } from "./Show";
 import React from "react"
 
-export const Search = ({search, setSearch}) => {
+export const Search = () => {
 
+    const [search, setSearch] = React.useState('');
     const [shows, setShows ] = React.useState([]);
 
-    const handleClick =e=>{
+//! Faire onSubmit handleSubmit sur le form permet de valider avec la touche "entrée", 
+//! meilleure pratique que onClick handleClick sur le button
+
+    const handleSubmit = e => {
         e.preventDefault();
         console.log('pass');
         fetch(`https://api.tvmaze.com/search/shows?q=${search}`)
         .then(res=>res.json())
         .then(data => setShows(data))
         .catch(err=> console.log(err))
-    }   
+    }
 
     return (
         <>
-        <form>
+        <form onSubmit={handleSubmit}>
         <input
             type="text"
             defaultValue={search}
@@ -26,7 +30,7 @@ export const Search = ({search, setSearch}) => {
              }
             placeholder="Which show are you looking for ?"
         />
-        <button onClick={handleClick}>Go !</button>
+        <button type="submit">Go !</button>
         </form>
             <div className="shows">
                 {shows
